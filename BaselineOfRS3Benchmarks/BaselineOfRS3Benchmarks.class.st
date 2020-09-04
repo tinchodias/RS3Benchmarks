@@ -15,7 +15,7 @@ BaselineOfRS3Benchmarks >> baseline: spec [
 				declareSMarkOn: spec.
 
 			spec
-				package: 'Roassal3-Benchmarks' with: [ spec requires: #('Roassal3' 'SMark') ].
+				package: 'Roassal3-Benchmarks' with: [ spec requires: #("'Roassal3'" 'SMark') ].
  ]
 ]
 
