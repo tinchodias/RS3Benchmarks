@@ -30,3 +30,6 @@ Evaluate:
 RSLabelBenchs new runOnNumberOfLabels inspect
 `
 ``
+
+## License
+The code is licensed under [MIT](LICENSE).
