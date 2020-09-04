@@ -1,7 +1,7 @@
 # RS3Benchmarks
 Benchmark suites to profile performance of Roassal3.
 
-## Installation
+## Installation
 
 Evaluate in Pharo:
 
