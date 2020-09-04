@@ -1,5 +1,7 @@
 # RS3Benchmarks
-Benchmark suites to profile performance of Roassal3.
+Benchmark suites to profile performance of [Roassal3](https://github.com/objectprofile/roassal3).
+
+This project uses https://github.com/smarr/SMark to run and report benchmarks.
 
 ## Installation
 First, load Roassal3.
