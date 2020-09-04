@@ -5,9 +5,9 @@ Benchmark suites to profile performance of Roassal3.
 
 Evaluate in Pharo:
 
-´´´Smalltalk
+```Smalltalk
 Metacello new
 	baseline: 'RS3Benchmarks';
 	repository: 'github://tinchodias/RS3Benchmarks';
 	load
-´´´
+```
