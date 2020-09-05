@@ -36,21 +36,41 @@ RSLabelBenchs >> benchLabels [
 	numberOfRenderings timesRepeat: [ morph drawOnMockCanvas ]
 ]
 
-{ #category : #benchmarking }
+{ #category : #accessing }
+RSLabelBenchs >> customParametersAndValues [
+
+	| dictionary |
+	dictionary := SmallDictionary new.
+	self customParametersAndValuesDo: [ :key :value | 
+		dictionary at: key put: value ].
+	^ dictionary
+]
+
+{ #category : #accessing }
+RSLabelBenchs >> customParametersAndValuesDo: aFullBlockClosure [ 
+
+	#(numberOfLabels numberOfRenderings) do: [ :each |
+		aFullBlockClosure
+			value: each
+			value: (self perform: each) ]
+
+]
+
+{ #category : #accessing }
 RSLabelBenchs >> defaultNumberOfIterations [
 	^ 15
 ]
 
-{ #category : #benchmarking }
+{ #category : #accessing }
 RSLabelBenchs >> defaultNumberOfLabels [
 
-	^ 50
+	^ 75
 ]
 
-{ #category : #benchmarking }
+{ #category : #accessing }
 RSLabelBenchs >> defaultNumberOfRenderings [
 
-	^ 30 * 10
+	^ 100
 ]
 
 { #category : #benchmarking }
@@ -59,27 +79,51 @@ RSLabelBenchs >> instanceVariablesToPreserve [
 	^ super instanceVariablesToPreserve, #(numberOfLabels numberOfRenderings)
 ]
 
-{ #category : #benchmarking }
-RSLabelBenchs >> runFor: aNumberOfIterations [
+{ #category : #accessing }
+RSLabelBenchs >> numberOfLabels [
+	^ numberOfLabels
+]
 
-	^ self class defaultRunner 
-		execute: self
-		with: aNumberOfIterations
+{ #category : #accessing }
+RSLabelBenchs >> numberOfLabels: anObject [
+	numberOfLabels := anObject
+]
+
+{ #category : #accessing }
+RSLabelBenchs >> numberOfRenderings [
+	^ numberOfRenderings
+]
+
+{ #category : #accessing }
+RSLabelBenchs >> numberOfRenderings: anObject [
+	numberOfRenderings := anObject
 ]
 
 { #category : #benchmarking }
 RSLabelBenchs >> runOnNumberOfLabels [
+	"Run the benchmarks taking numberOfLabels as a variable. Print results on Transcript."
+
 	<script: 'self new runOnNumberOfLabels inspect'>
 
-	| reportByParameter |
-	numberOfRenderings := self defaultNumberOfRenderings.
+	^ (1 to: self defaultNumberOfLabels by: 5) collect: [ :each |
+		| customParametersAndValues |
 
-	reportByParameter := OrderedDictionary new.
-	(10 to: self defaultNumberOfLabels by: 10) do: [ :each |
 		numberOfLabels := each.
-		reportByParameter
-			at: each
-			put: (self runFor: self defaultNumberOfIterations) report ].
-	
-	^ reportByParameter
+		numberOfRenderings := self defaultNumberOfRenderings.
+
+		"Calculate current parameters: they will be cleaned after execute:with: below."
+		customParametersAndValues := self customParametersAndValues.
+
+		"Run the benchmarks with these custom parameters"
+		self class defaultRunner 
+			execute: self
+			with: self defaultNumberOfIterations.
+
+		"Print on Transcript"
+		customParametersAndValues traceCr.
+		runner reportOn: Transcript.
+
+		"Value to collect"
+		self customParametersAndValues -> runner ]
+
 ]
