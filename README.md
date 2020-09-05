@@ -27,8 +27,20 @@ Note Roassal3 is not added as a dependency on purpose. The itention is to avoid 
 Evaluate:
 
 ```Smalltalk
-RSLabelBenchs new runOnNumberOfLabels inspect
+RSLabelBenchs new runOnNumberOfLabels
 ```
+
+You will find a series of results like this in Transcript:
+
+```
+a SmallDictionary(#numberOfLabels->1 #numberOfRenderings->100)
+Report for: RSLabelBenchs
+Benchmark Labels
+Labels total: iterations=15 runtime: 5.7ms +/-1.9
+```
+
+**TODO**: graph the results of that evaluation in a RS3 chart.
+
 
 ## License
 The code is licensed under [MIT](LICENSE).
