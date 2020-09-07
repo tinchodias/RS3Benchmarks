@@ -18,9 +18,8 @@ RSLabelBenchs >> benchLabels [
 	1 to: numberOfLabels do: [ :i | 
 		| box label |
 		label := RSLabel new
-			         fontSize: i;
-			         text: text;
 			         model: i;
+			         text: text;
 			         yourself.
 
 		box := RSBox new
