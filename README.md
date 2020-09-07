@@ -24,6 +24,17 @@ Metacello new
 Note Roassal3 is not added as a dependency on purpose. The itention is to avoid loading confussions when benchmarking multiple versions of Roassal3. This way, the user will explicitely choose which version is being measured.
 
 ## How to use
+
+### Visual version
+
+Evaluate:
+
+```Smalltalk
+RSBenchChartBuilder exampleOnNumberOfLabels
+```
+
+### Text version
+
 Evaluate:
 
 ```Smalltalk
@@ -38,9 +49,6 @@ Report for: RSLabelBenchs
 Benchmark Labels
 Labels total: iterations=15 runtime: 5.7ms +/-1.9
 ```
-
-**TODO**: graph the results of that evaluation in a RS3 chart.
-
 
 ## License
 The code is licensed under [MIT](LICENSE).
