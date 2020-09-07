@@ -10,7 +10,9 @@ Class {
 		'chart',
 		'rawData',
 		'nameOfBenchmark',
-		'selectedVariable'
+		'selectedVariable',
+		'theme',
+		'statsReporter'
 	],
 	#category : #'Roassal3-Benchmarks'
 }
@@ -25,19 +27,24 @@ RSBenchChartBuilder class >> exampleOnNumberOfLabels [
 		rawData: rawData;
 		nameOfBenchmark: 'Labels';
 		selectedVariable: #numberOfLabels;
-		processRawData;
-		buildChart;
+		build;
 		chart) open
 ]
 
 { #category : #building }
+RSBenchChartBuilder >> build [
+	self processRawData.
+	self buildChart.
+
+]
+
+{ #category : #private }
 RSBenchChartBuilder >> buildChart [
 
-	| horizontalIndices theme |
+	| horizontalIndices |
 	horizontalIndices := 1 to: valuesOfSelectedVariable size.
 	chart := RSChart new.
 	chart extent: 600@400.
-	theme := Smalltalk ui theme.
 
 	chart addPlot: (RSAreaPlot new 
 		x: horizontalIndices y1: maxs y2: mins;
@@ -64,35 +71,47 @@ RSBenchChartBuilder >> chart [
 ]
 
 { #category : #initialization }
+RSBenchChartBuilder >> initialize [
+	super initialize.
+	
+	theme := Smalltalk ui theme.
+	statsReporter := SMarkSimpleStatisticsReporter new.
+
+]
+
+{ #category : #initialization }
 RSBenchChartBuilder >> nameOfBenchmark: aString [
 	"Set the SMark name for the benchmark to graph. For example, if the method is named benchLabels, here you should set just 'Labels'."
 
 	nameOfBenchmark := aString
 ]
 
-{ #category : #building }
+{ #category : #private }
 RSBenchChartBuilder >> processRawData [
 	
-	| statsReporter |
 	valuesOfSelectedVariable := OrderedCollection new.
 	averages := OrderedCollection new.
 	mins := OrderedCollection new.
 	maxs := OrderedCollection new.
 	errors := OrderedCollection new.
-	statsReporter := SMarkSimpleStatisticsReporter new.
 
-	rawData do: [ :each |
-		| totalTimes benchResults |
-		valuesOfSelectedVariable add: (each key at: selectedVariable).
+	rawData do: [ :each | self processRawDataItem: each ].
 
-		benchResults := each value results at: nameOfBenchmark.
-		totalTimes := statsReporter totalResultsFor: benchResults.
-"		totalTimes := benchResults collect: [ :result | (result criteria at: 'total') totalTime ]."
-		errors add: (statsReporter confidenceVariance: totalTimes).
-		averages add: totalTimes average asFloat.
-		mins add: totalTimes min.
-		maxs add: totalTimes max ].
+]
 
+{ #category : #private }
+RSBenchChartBuilder >> processRawDataItem: each [
+
+	| totalTimes benchResults |
+	valuesOfSelectedVariable add: (each key at: selectedVariable).
+
+	benchResults := each value results at: nameOfBenchmark.
+	totalTimes := statsReporter totalResultsFor: benchResults.
+"	totalTimes := benchResults collect: [ :result | (result criteria at: 'total') totalTime ]."
+	errors add: (statsReporter confidenceVariance: totalTimes).
+	averages add: totalTimes average asFloat.
+	mins add: totalTimes min.
+	maxs add: totalTimes max
 ]
 
 { #category : #initialization }
@@ -101,6 +120,6 @@ RSBenchChartBuilder >> rawData: aCollection [
 ]
 
 { #category : #initialization }
-RSBenchChartBuilder >> selectedVariable: anObject [
-	selectedVariable := anObject
+RSBenchChartBuilder >> selectedVariable: aSelector [
+	selectedVariable := aSelector
 ]
