@@ -3,33 +3,59 @@ Class {
 	#superclass : #SMarkSuite,
 	#instVars : [
 		'numberOfLabels',
-		'numberOfRenderings'
+		'numberOfRenderings',
+		'layoutSelector'
 	],
 	#category : #'Roassal3-Benchmarks'
 }
 
+{ #category : #accessing }
+RSLabelBenchs >> applyFlowLayout: aRSCanvas [
+
+	RSFlowLayout on: aRSCanvas shapes
+]
+
+{ #category : #accessing }
+RSLabelBenchs >> applyForceBasedLayout: aRSCanvas [
+
+	RSForceBasedLayout new
+		doNotUseProgressBar;
+		charge: -500;
+		on: aRSCanvas nodes
+]
+
+{ #category : #accessing }
+RSLabelBenchs >> applyGridLayout: aRSCanvas [
+
+	RSGridLayout on: aRSCanvas shapes
+]
+
+{ #category : #accessing }
+RSLabelBenchs >> applyNoLayout: _ [
+	"Nothing"
+]
+
 { #category : #benchmarking }
 RSLabelBenchs >> benchLabels [
 
-	| aRSCanvas text morph form |
+	| aRSCanvas morph form |
 	aRSCanvas := RSCanvas new.
-	text := 'LP4_Genehmigungsplanungsheft'.
 
+	"Add a number of labels"
 	1 to: numberOfLabels do: [ :i | 
-		| box label |
-		label := RSLabel new
-			         model: i;
-			         text: text;
-			         yourself.
-
-		box := RSBox new
-			       extent: label width @ label height;
-			       color: Color lightGray;
-			       yourself.
-
-		aRSCanvas add: box ].
-
-	RSFlowLayout on: aRSCanvas shapes.
+		aRSCanvas add: 
+			(RSLabel new
+	         model: i;
+	         text: 'Label: ', i asString;
+	         yourself) ].
+	
+	"Add edges between them"
+	RSEdgeBuilder line
+		shapes: aRSCanvas shapes;
+		canvas: aRSCanvas;
+		connectFrom: [ :n | n // 2 ].
+	
+	self perform: layoutSelector with: aRSCanvas.
 
 	morph := aRSCanvas createMorph.
 	form := FormCanvas extent: morph extent.
@@ -38,7 +64,7 @@ RSLabelBenchs >> benchLabels [
 
 { #category : #accessing }
 RSLabelBenchs >> customParameters [ 
-	^ #(numberOfLabels numberOfRenderings)
+	^ #(numberOfLabels numberOfRenderings layoutSelector)
 ]
 
 { #category : #accessing }
@@ -62,10 +88,16 @@ RSLabelBenchs >> customParametersAndValuesDo: aFullBlockClosure [
 ]
 
 { #category : #accessing }
+RSLabelBenchs >> defaultLayoutSelector [
+
+	^ #applyNoLayout:
+]
+
+{ #category : #accessing }
 RSLabelBenchs >> defaultNumberOfIterations [
 	"The default number of times that each benchmark will be executed."
 
-	^ 30
+	^ 10
 ]
 
 { #category : #accessing }
@@ -80,10 +112,30 @@ RSLabelBenchs >> defaultNumberOfRenderings [
 	^ 20
 ]
 
-{ #category : #benchmarking }
+{ #category : #initialization }
+RSLabelBenchs >> initialize [
+	super initialize.
+	
+	numberOfRenderings := self defaultNumberOfRenderings.
+	numberOfLabels := self defaultNumberOfLabels.
+	layoutSelector := self defaultLayoutSelector.
+
+]
+
+{ #category : #initialization }
 RSLabelBenchs >> instanceVariablesToPreserve [
 
 	^ super instanceVariablesToPreserve, self customParameters
+]
+
+{ #category : #accessing }
+RSLabelBenchs >> layoutSelector [
+	^ layoutSelector
+]
+
+{ #category : #accessing }
+RSLabelBenchs >> layoutSelector: aSymbol [
+	layoutSelector := aSymbol
 ]
 
 { #category : #accessing }
@@ -106,15 +158,14 @@ RSLabelBenchs >> numberOfRenderings: anInteger [
 	numberOfRenderings := anInteger
 ]
 
-{ #category : #benchmarking }
-RSLabelBenchs >> runOnNumberOfLabels [
-	"Run the benchmarks taking numberOfLabels as a variable. Print results on Transcript."
+{ #category : #running }
+RSLabelBenchs >> runLayoutSelector: aSymbol maxLabels: maxLabels [
+	"Run the benchmarks using a determined layout, taking numberOfLabels as a variable. Print results on Transcript."
 
-	<script: 'self new runOnNumberOfLabels inspect'>
+	layoutSelector := aSymbol.
 
-	^ (1 to: self defaultNumberOfLabels * 3 by: 50) collect: [ :each |
+	^ (10 to: maxLabels) collect: [ :each |
 		numberOfLabels := each.
-		numberOfRenderings := self defaultNumberOfRenderings.
 
 		"Run the benchmarks with these custom parameters"
 		self class defaultRunner 
@@ -130,12 +181,19 @@ RSLabelBenchs >> runOnNumberOfLabels [
 
 ]
 
-{ #category : #benchmarking }
-RSLabelBenchs >> runOnNumberOfRenderings [
-	<script: 'self new runOnNumberOfRenderings inspect'>
+{ #category : #running }
+RSLabelBenchs >> runNoLayout [
 
-	^ (0 to: 5) collect: [ :each |
-		numberOfLabels := self defaultNumberOfLabels.
+	^ self
+		  runLayoutSelector: #applyNoLayout:
+		  maxLabels: self defaultNumberOfLabels * 3
+
+]
+
+{ #category : #running }
+RSLabelBenchs >> runOnNumberOfRenderings [
+
+	^ (0 to: 20) collect: [ :each |
 		numberOfRenderings := each.
 
 		"Run the benchmarks with these custom parameters"

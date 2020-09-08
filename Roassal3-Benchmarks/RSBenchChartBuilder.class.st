@@ -18,10 +18,26 @@ Class {
 }
 
 { #category : #examples }
-RSBenchChartBuilder class >> exampleOnNumberOfLabels [
+RSBenchChartBuilder class >> exampleFirstRenderings [
 
 	| rawData |
-	rawData := RSLabelBenchs new runOnNumberOfLabels.
+	rawData := RSLabelBenchs new runOnNumberOfRenderings.
+
+	(self new
+		rawData: rawData;
+		nameOfBenchmark: 'Labels';
+		selectedVariable: #numberOfRenderings;
+		build;
+		chart) open
+]
+
+{ #category : #examples }
+RSBenchChartBuilder class >> exampleFlowLayout [
+
+	| rawData |
+	rawData := RSLabelBenchs new
+		runLayoutSelector: #applyFlowLayout:
+		maxLabels: 300.
 
 	(self new
 		rawData: rawData;
@@ -32,15 +48,33 @@ RSBenchChartBuilder class >> exampleOnNumberOfLabels [
 ]
 
 { #category : #examples }
-RSBenchChartBuilder class >> exampleOnNumberOfRenderings [
+RSBenchChartBuilder class >> exampleForceBasedLayout [
 
 	| rawData |
-	rawData := RSLabelBenchs new runOnNumberOfRenderings.
+	rawData := RSLabelBenchs new
+		runLayoutSelector: #applyForceBasedLayout:
+		maxLabels: 80.
 
 	(self new
 		rawData: rawData;
 		nameOfBenchmark: 'Labels';
-		selectedVariable: #numberOfRenderings;
+		selectedVariable: #numberOfLabels;
+		build;
+		chart) open
+]
+
+{ #category : #examples }
+RSBenchChartBuilder class >> exampleNoLayout [
+
+	| rawData |
+	rawData := RSLabelBenchs new
+		runLayoutSelector: #applyNoLayout:
+		maxLabels: 300.
+
+	(self new
+		rawData: rawData;
+		nameOfBenchmark: 'Labels';
+		selectedVariable: #numberOfLabels;
 		build;
 		chart) open
 ]
