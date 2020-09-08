@@ -44,7 +44,7 @@ RSBenchChartBuilder >> buildChart [
 	| horizontalIndices |
 	horizontalIndices := 1 to: valuesOfSelectedVariable size.
 	chart := RSChart new.
-	chart extent: 600@400.
+	chart extent: 800@600.
 
 	chart addPlot: (RSAreaPlot new 
 		x: horizontalIndices y1: maxs y2: mins;
