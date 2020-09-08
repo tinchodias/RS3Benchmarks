@@ -48,7 +48,7 @@ RSLabelBenchs >> benchLabels [
 	         model: i;
 	         text: 'Label: ', i asString;
 	         yourself) ].
-	
+	 
 	"Add edges between them"
 	RSEdgeBuilder line
 		shapes: aRSCanvas shapes;
@@ -57,6 +57,7 @@ RSLabelBenchs >> benchLabels [
 	
 	self perform: layoutSelector with: aRSCanvas.
 
+	numberOfRenderings isZero ifTrue: [ ^self ].
 	morph := aRSCanvas createMorph.
 	form := FormCanvas extent: morph extent.
 	numberOfRenderings timesRepeat: [ morph drawOn: form ]
@@ -97,7 +98,7 @@ RSLabelBenchs >> defaultLayoutSelector [
 RSLabelBenchs >> defaultNumberOfIterations [
 	"The default number of times that each benchmark will be executed."
 
-	^ 10
+	^ 20
 ]
 
 { #category : #accessing }
@@ -109,7 +110,7 @@ RSLabelBenchs >> defaultNumberOfLabels [
 { #category : #accessing }
 RSLabelBenchs >> defaultNumberOfRenderings [
 
-	^ 20
+	^ 0
 ]
 
 { #category : #initialization }
@@ -170,7 +171,7 @@ RSLabelBenchs >> runLayoutSelector: aSymbol maxLabels: maxLabels [
 		"Run the benchmarks with these custom parameters"
 		self class defaultRunner 
 			execute: self
-			with: self defaultNumberOfIterations.
+			with: 10 "self defaultNumberOfIterations".
 
 		"Print on Transcript"
 		self customParametersAndValues traceCr.

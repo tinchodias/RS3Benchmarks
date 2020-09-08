@@ -53,7 +53,7 @@ RSBenchChartBuilder class >> exampleForceBasedLayout [
 	| rawData |
 	rawData := RSLabelBenchs new
 		runLayoutSelector: #applyForceBasedLayout:
-		maxLabels: 80.
+		maxLabels: 100.
 
 	(self new
 		rawData: rawData;
