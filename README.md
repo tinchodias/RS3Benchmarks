@@ -30,12 +30,13 @@ Note Roassal3 is not added as a dependency on purpose. The intention is to avoid
 Evaluate:
 
 ```Smalltalk
-RSBenchChartBuilder exampleForceBasedLayout
+RSBenchChartBuilder exampleFirstRenderings
 ```
 
-And a window will show up, something like:
+Wait a minute until benchmarks are completed, and a window will show up:
 
 ![Chart](assets/chart.png)
+
 
 
 ### Text version
