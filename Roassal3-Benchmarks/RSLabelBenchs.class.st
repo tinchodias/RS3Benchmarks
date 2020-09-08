@@ -182,15 +182,6 @@ RSLabelBenchs >> runLayoutSelector: aSymbol maxLabels: maxLabels [
 ]
 
 { #category : #running }
-RSLabelBenchs >> runNoLayout [
-
-	^ self
-		  runLayoutSelector: #applyNoLayout:
-		  maxLabels: self defaultNumberOfLabels * 3
-
-]
-
-{ #category : #running }
 RSLabelBenchs >> runOnNumberOfRenderings [
 
 	^ (0 to: 20) collect: [ :each |
