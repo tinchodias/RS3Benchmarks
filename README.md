@@ -21,7 +21,7 @@ Metacello new
 	load
 ```
 
-Note Roassal3 is not added as a dependency on purpose. The itention is to avoid loading confussions when benchmarking multiple versions of Roassal3. This way, the user will explicitely choose which version is being measured.
+Note Roassal3 is not added as a dependency on purpose. The intention is to avoid loading confusions when benchmarking multiple versions of Roassal3. This way, the user will explicitly choose which version is being measured.
 
 ## How to use
 
@@ -30,25 +30,32 @@ Note Roassal3 is not added as a dependency on purpose. The itention is to avoid 
 Evaluate:
 
 ```Smalltalk
-RSBenchChartBuilder exampleOnNumberOfLabels
+RSBenchChartBuilder exampleForceBasedLayout
 ```
+
+And a window will show up, something like:
+
+![Chart](assets/chart.png)
+
 
 ### Text version
 
 Evaluate:
 
 ```Smalltalk
-RSLabelBenchs new runOnNumberOfLabels
+RSLabelBenchs new runOnNumberOfRenderings
 ```
 
-You will find a series of results like this in Transcript:
+You will find a series of reports like this on Transcript:
 
 ```
-a SmallDictionary(#numberOfLabels->1 #numberOfRenderings->100)
+a SmallDictionary(#numberOfLabels->100 #numberOfRenderings->0 #layoutSelector->#applyForceBasedLayout:)
 Report for: RSLabelBenchs
 Benchmark Labels
-Labels total: iterations=15 runtime: 5.7ms +/-1.9
+Labels total: iterations=10 runtime: 347.10ms +/-0.83
 ```
+
+The first line shows the parameters of that benchmark run (100 labels, 0 renderings, force based layout).
 
 ## License
 The code is licensed under [MIT](LICENSE).
