@@ -36,6 +36,11 @@ RSLabelBenchs >> benchLabels [
 ]
 
 { #category : #accessing }
+RSLabelBenchs >> customParameters [ 
+	^ #(numberOfLabels numberOfRenderings)
+]
+
+{ #category : #accessing }
 RSLabelBenchs >> customParametersAndValues [
 
 	| dictionary |
@@ -48,7 +53,7 @@ RSLabelBenchs >> customParametersAndValues [
 { #category : #accessing }
 RSLabelBenchs >> customParametersAndValuesDo: aFullBlockClosure [ 
 
-	#(numberOfLabels numberOfRenderings) do: [ :each |
+	self customParameters do: [ :each |
 		aFullBlockClosure
 			value: each
 			value: (self perform: each) ]
@@ -57,25 +62,27 @@ RSLabelBenchs >> customParametersAndValuesDo: aFullBlockClosure [
 
 { #category : #accessing }
 RSLabelBenchs >> defaultNumberOfIterations [
-	^ 15
+	"The default number of times that each benchmark will be executed."
+
+	^ 30
 ]
 
 { #category : #accessing }
 RSLabelBenchs >> defaultNumberOfLabels [
 
-	^ 75
+	^ 300
 ]
 
 { #category : #accessing }
 RSLabelBenchs >> defaultNumberOfRenderings [
 
-	^ 100
+	^ 20
 ]
 
 { #category : #benchmarking }
 RSLabelBenchs >> instanceVariablesToPreserve [
 
-	^ super instanceVariablesToPreserve, #(numberOfLabels numberOfRenderings)
+	^ super instanceVariablesToPreserve, self customParameters
 ]
 
 { #category : #accessing }
@@ -84,8 +91,8 @@ RSLabelBenchs >> numberOfLabels [
 ]
 
 { #category : #accessing }
-RSLabelBenchs >> numberOfLabels: anObject [
-	numberOfLabels := anObject
+RSLabelBenchs >> numberOfLabels: anInteger [
+	numberOfLabels := anInteger
 ]
 
 { #category : #accessing }
@@ -94,8 +101,8 @@ RSLabelBenchs >> numberOfRenderings [
 ]
 
 { #category : #accessing }
-RSLabelBenchs >> numberOfRenderings: anObject [
-	numberOfRenderings := anObject
+RSLabelBenchs >> numberOfRenderings: anInteger [
+	numberOfRenderings := anInteger
 ]
 
 { #category : #benchmarking }
