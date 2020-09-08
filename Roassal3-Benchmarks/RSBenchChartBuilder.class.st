@@ -31,6 +31,20 @@ RSBenchChartBuilder class >> exampleOnNumberOfLabels [
 		chart) open
 ]
 
+{ #category : #examples }
+RSBenchChartBuilder class >> exampleOnNumberOfRenderings [
+
+	| rawData |
+	rawData := RSLabelBenchs new runOnNumberOfRenderings.
+
+	(self new
+		rawData: rawData;
+		nameOfBenchmark: 'Labels';
+		selectedVariable: #numberOfRenderings;
+		build;
+		chart) open
+]
+
 { #category : #building }
 RSBenchChartBuilder >> build [
 	self processRawData.

@@ -11,8 +11,8 @@ Class {
 { #category : #benchmarking }
 RSLabelBenchs >> benchLabels [
 
-	| c text morph |
-	c := RSCanvas new.
+	| aRSCanvas text morph form |
+	aRSCanvas := RSCanvas new.
 	text := 'LP4_Genehmigungsplanungsheft'.
 
 	1 to: numberOfLabels do: [ :i | 
@@ -27,12 +27,13 @@ RSLabelBenchs >> benchLabels [
 			       color: Color lightGray;
 			       yourself.
 
-		c add: box ].
+		aRSCanvas add: box ].
 
-	RSFlowLayout on: c shapes.
+	RSFlowLayout on: aRSCanvas shapes.
 
-	morph := c createMorph.
-	numberOfRenderings timesRepeat: [ morph drawOnMockCanvas ]
+	morph := aRSCanvas createMorph.
+	form := FormCanvas extent: morph extent.
+	numberOfRenderings timesRepeat: [ morph drawOn: form ]
 ]
 
 { #category : #accessing }
@@ -111,14 +112,9 @@ RSLabelBenchs >> runOnNumberOfLabels [
 
 	<script: 'self new runOnNumberOfLabels inspect'>
 
-	^ (1 to: self defaultNumberOfLabels by: 5) collect: [ :each |
-		| customParametersAndValues |
-
+	^ (1 to: self defaultNumberOfLabels * 3 by: 50) collect: [ :each |
 		numberOfLabels := each.
 		numberOfRenderings := self defaultNumberOfRenderings.
-
-		"Calculate current parameters: they will be cleaned after execute:with: below."
-		customParametersAndValues := self customParametersAndValues.
 
 		"Run the benchmarks with these custom parameters"
 		self class defaultRunner 
@@ -126,7 +122,29 @@ RSLabelBenchs >> runOnNumberOfLabels [
 			with: self defaultNumberOfIterations.
 
 		"Print on Transcript"
-		customParametersAndValues traceCr.
+		self customParametersAndValues traceCr.
+		runner reportOn: Transcript.
+
+		"Value to collect"
+		self customParametersAndValues -> runner ]
+
+]
+
+{ #category : #benchmarking }
+RSLabelBenchs >> runOnNumberOfRenderings [
+	<script: 'self new runOnNumberOfRenderings inspect'>
+
+	^ (0 to: 5) collect: [ :each |
+		numberOfLabels := self defaultNumberOfLabels.
+		numberOfRenderings := each.
+
+		"Run the benchmarks with these custom parameters"
+		self class defaultRunner 
+			execute: self
+			with: self defaultNumberOfIterations.
+
+		"Print on Transcript"
+		self customParametersAndValues traceCr.
 		runner reportOn: Transcript.
 
 		"Value to collect"
