@@ -1,6 +1,6 @@
 Class {
 	#name : #RSLabelBenchs,
-	#superclass : #SMarkSuite,
+	#superclass : #RSBenchs,
 	#instVars : [
 		'numberOfLabels',
 		'numberOfRenderings',
@@ -69,26 +69,6 @@ RSLabelBenchs >> customParameters [
 ]
 
 { #category : #accessing }
-RSLabelBenchs >> customParametersAndValues [
-
-	| dictionary |
-	dictionary := SmallDictionary new.
-	self customParametersAndValuesDo: [ :key :value | 
-		dictionary at: key put: value ].
-	^ dictionary
-]
-
-{ #category : #accessing }
-RSLabelBenchs >> customParametersAndValuesDo: aFullBlockClosure [ 
-
-	self customParameters do: [ :each |
-		aFullBlockClosure
-			value: each
-			value: (self perform: each) ]
-
-]
-
-{ #category : #accessing }
 RSLabelBenchs >> defaultLayoutSelector [
 
 	^ #applyNoLayout:
@@ -121,12 +101,6 @@ RSLabelBenchs >> initialize [
 	numberOfLabels := self defaultNumberOfLabels.
 	layoutSelector := self defaultLayoutSelector.
 
-]
-
-{ #category : #initialization }
-RSLabelBenchs >> instanceVariablesToPreserve [
-
-	^ super instanceVariablesToPreserve, self customParameters
 ]
 
 { #category : #accessing }
