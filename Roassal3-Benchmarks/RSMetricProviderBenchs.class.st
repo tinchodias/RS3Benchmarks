@@ -72,7 +72,7 @@ RSMetricProviderBenchs >> exampleFuel [
 	(RSBenchChartBuilder new
 		rawData: materializedResults;
 		nameOfBenchmark: 'Labels';
-		selectedVariable: #metricProviderClass;
+		selectedCustomParameters: #(metricProviderClass stringSelector);
 		build;
 		chart) open
 

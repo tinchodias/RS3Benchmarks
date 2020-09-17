@@ -6,13 +6,13 @@ Class {
 		'mins',
 		'maxs',
 		'errors',
-		'valuesOfSelectedVariable',
 		'chart',
 		'rawData',
 		'nameOfBenchmark',
-		'selectedVariable',
 		'theme',
-		'statsReporter'
+		'statsReporter',
+		'horizontalNames',
+		'selectedCustomParameters'
 	],
 	#category : #'Roassal3-Benchmarks'
 }
@@ -26,7 +26,7 @@ RSBenchChartBuilder class >> exampleFirstRenderings [
 	(self new
 		rawData: rawData;
 		nameOfBenchmark: 'Labels';
-		selectedVariable: #numberOfRenderings;
+		selectedCustomParameters: #(numberOfRenderings);
 		build;
 		chart) open
 ]
@@ -42,7 +42,7 @@ RSBenchChartBuilder class >> exampleFlowLayout [
 	(self new
 		rawData: rawData;
 		nameOfBenchmark: 'Labels';
-		selectedVariable: #numberOfLabels;
+		selectedCustomParameters: #(numberOfLabels);
 		build;
 		chart) open
 ]
@@ -58,7 +58,7 @@ RSBenchChartBuilder class >> exampleForceBasedLayout [
 	(self new
 		rawData: rawData;
 		nameOfBenchmark: 'Labels';
-		selectedVariable: #numberOfLabels;
+		selectedCustomParameters: #(numberOfLabels);
 		build;
 		chart) open
 ]
@@ -74,7 +74,7 @@ RSBenchChartBuilder class >> exampleNoLayout [
 	(self new
 		rawData: rawData;
 		nameOfBenchmark: 'Labels';
-		selectedVariable: #numberOfLabels;
+		selectedCustomParameters: #(numberOfLabels);
 		build;
 		chart) open
 ]
@@ -90,7 +90,7 @@ RSBenchChartBuilder >> build [
 RSBenchChartBuilder >> buildChart [
 
 	| horizontalIndices |
-	horizontalIndices := 1 to: valuesOfSelectedVariable size.
+	horizontalIndices := 1 to: horizontalNames size.
 	chart := RSChart new.
 	chart extent: 800@600.
 
@@ -104,10 +104,10 @@ RSBenchChartBuilder >> buildChart [
 
 	chart addPlot: (RSLinePlot new x: horizontalIndices y: averages; fmt: 'o'; color: theme textColor).
 
-	chart addDecoration: (RSHorizontalTick new fromNames: valuesOfSelectedVariable).
+	chart addDecoration: (RSHorizontalTick new fromNames: horizontalNames).
 	chart addDecoration: (RSVerticalTick new numberOfTicks: 10; asFloat).
 	chart title: nameOfBenchmark.
-	chart xlabel: selectedVariable.
+	chart xlabel: self xlabelString.
 	chart ylabel: 'Time (ms)'.
 
 ]
@@ -116,6 +116,17 @@ RSBenchChartBuilder >> buildChart [
 RSBenchChartBuilder >> chart [
 
 	^ chart
+]
+
+{ #category : #private }
+RSBenchChartBuilder >> horizontalNameFor: anAssociation [
+	
+	^ String streamContents: [ :stream |
+		selectedCustomParameters
+			do: [ :each |
+				stream << (anAssociation key at: each) asString ]
+			separatedBy: [ 
+				stream << ' + ' ] ]
 ]
 
 { #category : #initialization }
@@ -137,7 +148,7 @@ RSBenchChartBuilder >> nameOfBenchmark: aString [
 { #category : #private }
 RSBenchChartBuilder >> processRawData [
 	
-	valuesOfSelectedVariable := OrderedCollection new.
+	horizontalNames := OrderedCollection new.
 	averages := OrderedCollection new.
 	mins := OrderedCollection new.
 	maxs := OrderedCollection new.
@@ -148,12 +159,12 @@ RSBenchChartBuilder >> processRawData [
 ]
 
 { #category : #private }
-RSBenchChartBuilder >> processRawDataItem: each [
+RSBenchChartBuilder >> processRawDataItem: anAssociation [
 
 	| totalTimes benchResults |
-	valuesOfSelectedVariable add: (each key at: selectedVariable).
+	horizontalNames add: (self horizontalNameFor: anAssociation).
 
-	benchResults := each value results at: nameOfBenchmark.
+	benchResults := anAssociation value results at: nameOfBenchmark.
 	totalTimes := statsReporter totalResultsFor: benchResults.
 "	totalTimes := benchResults collect: [ :result | (result criteria at: 'total') totalTime ]."
 	errors add: (statsReporter confidenceVariance: totalTimes).
@@ -164,10 +175,23 @@ RSBenchChartBuilder >> processRawDataItem: each [
 
 { #category : #initialization }
 RSBenchChartBuilder >> rawData: aCollection [
+	"Set the output of the benchmarks in the chart."
+
 	rawData := aCollection
 ]
 
 { #category : #initialization }
-RSBenchChartBuilder >> selectedVariable: aSelector [
-	selectedVariable := aSelector
+RSBenchChartBuilder >> selectedCustomParameters: aCollectionOfSymbols [
+	"Set the custom pararmetters of the benchmark that are considered as variables (for the horizontal axis)."
+
+	selectedCustomParameters := aCollectionOfSymbols
+]
+
+{ #category : #private }
+RSBenchChartBuilder >> xlabelString [
+	^ String streamContents: [ :stream |
+		stream << 'Custom Parameters: '.
+		selectedCustomParameters
+			do: [ :each | stream << each ]
+			separatedBy: [ stream << ', ' ] ]
 ]
