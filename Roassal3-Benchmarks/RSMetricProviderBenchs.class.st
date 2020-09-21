@@ -1,3 +1,6 @@
+"
+This benchmark is for RSLabel with different metrics provider and different text
+"
 Class {
 	#name : #RSMetricProviderBenchs,
 	#superclass : #RSBenchs,
@@ -58,7 +61,7 @@ RSMetricProviderBenchs >> exampleFuel [
 	| results fileName materializedResults |
 
 	"Generate results by running the benchmarks"
-	results := RSMetricProviderBenchs new runAll.
+	results := self class new runAll.
 
 	fileName := 'hola.benchs.fuel'.
 	fileName asFileReference ensureDeleteFile.

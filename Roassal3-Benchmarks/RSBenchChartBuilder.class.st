@@ -1,3 +1,6 @@
+"
+This is a basic chart for RSLabelBenchs
+"
 Class {
 	#name : #RSBenchChartBuilder,
 	#superclass : #Object,

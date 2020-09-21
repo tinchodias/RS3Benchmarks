@@ -1,3 +1,6 @@
+"
+this benchmark uses font size and varios labels
+"
 Class {
 	#name : #RSLabelBenchs,
 	#superclass : #RSBenchs,

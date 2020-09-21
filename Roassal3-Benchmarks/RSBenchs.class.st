@@ -1,3 +1,6 @@
+"
+Abstract class with some benchmarks for roassal3
+"
 Class {
 	#name : #RSBenchs,
 	#superclass : #SMarkSuite,
