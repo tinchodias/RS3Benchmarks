@@ -47,6 +47,24 @@ RSMetricProviderBenchs >> benchLabels [
 	10 timesRepeat: [ morph drawOn: form ]
 ]
 
+{ #category : #examples }
+RSMetricProviderBenchs >> createANewBench [
+	"Example of how to serialize and materialize results."
+
+	<script: 'self new createANewBench'>
+
+	| results fileName |
+
+	"Generate results by running the benchmarks"
+	results := self class new runAll.
+
+	fileName := Time microsecondClockValue asString, '.fuel'.
+
+	"Write results to image directory"
+	FLSerializer serialize: results toFileNamed: fileName.
+
+]
+
 { #category : #accessing }
 RSMetricProviderBenchs >> customParameters [ 
 	^ #(metricProviderClass stringSelector)
@@ -64,14 +82,13 @@ RSMetricProviderBenchs >> exampleFuel [
 	results := self class new runAll.
 
 	fileName := 'hola.benchs.fuel'.
-	fileName asFileReference ensureDeleteFile.
 
 	"Write results to image directory"
 	FLSerializer serialize: results toFileNamed: fileName.
 
 	"Read results from the file name in image directory"
 	materializedResults := (FLMaterializer materializeFromFileNamed: fileName).
-
+	fileName asFileReference delete.
 	(RSBenchChartBuilder new
 		rawData: materializedResults;
 		nameOfBenchmark: 'Labels';

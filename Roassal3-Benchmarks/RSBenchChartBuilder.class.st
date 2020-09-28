@@ -92,7 +92,7 @@ RSBenchChartBuilder >> build [
 { #category : #private }
 RSBenchChartBuilder >> buildChart [
 
-	| horizontalIndices |
+	| horizontalIndices horizontal |
 	horizontalIndices := 1 to: horizontalNames size.
 	chart := RSChart new.
 	chart extent: 800@600.
@@ -107,7 +107,8 @@ RSBenchChartBuilder >> buildChart [
 
 	chart addPlot: (RSLinePlot new x: horizontalIndices y: averages; fmt: 'o'; color: theme textColor).
 
-	chart addDecoration: (RSHorizontalTick new fromNames: horizontalNames).
+	chart addDecoration: (horizontal := RSHorizontalTick new fromNames: horizontalNames).
+	horizontal labelLocation below; left.
 	chart addDecoration: (RSVerticalTick new numberOfTicks: 10; asFloat).
 	chart title: nameOfBenchmark.
 	chart xlabel: self xlabelString.
