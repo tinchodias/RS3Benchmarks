@@ -121,7 +121,7 @@ RSMetricProviderBenchs >> runAll [
 				do: [ :selector |
 					stringSelector := selector.
 					metricProviderClass := providerClass.
-					self class defaultRunner execute: self with: 15.
+					self class defaultRunner execute: self with: 30.
 					results add: (self customParametersAndValues -> runner) ] 
 				displayingProgress: [ :selector | 'Benchmarking ', selector ] ]
 
