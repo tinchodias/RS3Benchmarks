@@ -146,10 +146,11 @@ RSMetricProviderBenchs >> stringLoremIpsum [
 { #category : #running }
 RSMetricProviderBenchs >> stringRandom [
 
-	^ String streamContents: [ :s |
-		1 to: 255 do: [ :i |
-			s nextPut: (Character codePoint: (SharedRandom globalGenerator nextInt: i))] ].
-
+	^ String streamContents: [ :s | 
+		  1 to: 255 do: [ :i | 
+			  s nextPut:
+				  (Character codePoint:
+					   (SharedRandom globalGenerator nextInteger: i)) ] ]
 ]
 
 { #category : #accessing }
